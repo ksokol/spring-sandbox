@@ -1,0 +1,71 @@
+html
+{
+	overflow-y: scroll;
+}
+table.tablesorter thead tr .header
+{
+	background-image: url(bg.gif);
+	background-position: center right;
+	background-repeat: no-repeat;
+	cursor: pointer;
+}
+table.tablesorter thead tr .headerSortUp
+{
+	background-image: url(asc.gif);
+}
+table.tablesorter thead tr .headerSortDown
+{
+	background-image: url(desc.gif);
+}
+.row
+{
+	margin-top: 10px;
+}
+.error
+{
+	color: red;
+}
+.label
+{
+	font-size: 14.998px;
+}
+input.editable-select
+{
+	background: #FFF url(../asc.gif) right center no-repeat;
+	padding-right: 13px;
+}
+.editable-select-options
+{
+	background: #FFF;
+	border: 1px solid #CCC;
+	display: none;
+	margin: 0;
+	overflow: auto;
+	padding: 0;
+	position: absolute;
+	z-index: 10;
+}
+.editable-select-iframe
+{
+	background: #FFF;
+	display: none;
+	position: absolute;
+	z-index: 9;
+}
+.editable-select-options ul
+{
+	list-style: none;
+	list-style-image: none;
+	margin: 0;
+	padding: 0;
+	z-index: 10;
+}
+.editable-select-options li
+{
+	cursor: default;
+	padding: 2px;
+}
+.editable-select-options li.selected
+{
+	background: #EAEAEA;
+}
