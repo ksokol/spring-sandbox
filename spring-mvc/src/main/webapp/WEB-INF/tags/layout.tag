@@ -13,7 +13,7 @@
             <div class="container">
               <ul class="nav">
                 <security:authorize access="isAuthenticated()">
-                <li><a href="${pageContext.request.contextPath}/home">Home</a></li>
+                <li><a href="${pageContext.request.contextPath}/home.do">Home</a></li>
                 <li><a href="${pageContext.request.contextPath}/j_spring_security_logout">Logout</a></li>
                 </security:authorize>
               </ul>

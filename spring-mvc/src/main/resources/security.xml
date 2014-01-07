@@ -16,12 +16,12 @@
     </security:authentication-provider>
    </security:authentication-manager>
 
-   <security:http pattern='/login' security="none"/>
+   <security:http pattern='/login.do' security="none"/>
    <security:http pattern='/static/**' security="none"/>
 	
    <security:http auto-config='true' use-expressions="true">
 	<security:intercept-url pattern="/**" access="isFullyAuthenticated()" />
-	<security:form-login login-page='/login' default-target-url='/home' always-use-default-target='true'/>
-	<security:logout logout-success-url="/login" />
+	<security:form-login login-page='/login.do' default-target-url='/home.do' always-use-default-target='true'/>
+	<security:logout logout-success-url="/login.do" />
    </security:http>
 </beans>

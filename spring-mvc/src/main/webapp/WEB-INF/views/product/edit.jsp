@@ -19,13 +19,19 @@
         <h2>Edit product</h2>
     </c:if>
 
-    <sf:form modelAttribute="product" action="edit" method="post">
+    <sf:form modelAttribute="product" action="edit.do" method="post">
         <sf:input path="id" type="hidden"/>
 
         <div class="row">
             <div class="span2"><span>Name</span></div>
             <div class="span4"><sf:input path="name"/></div>
             <div class="span4"><sf:errors cssClass="error" path="name"/></div>
+        </div>
+
+        <div class="row">
+            <div class="span2"><span>Description</span></div>
+            <div class="span4"><sf:textarea path="description" rows="5" cols="30"/></div>
+            <div class="span4"><sf:errors cssClass="error" path="description"/></div>
         </div>
 
         <input class="btn btn-primary" type="submit" value="save">

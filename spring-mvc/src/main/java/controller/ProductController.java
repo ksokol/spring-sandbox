@@ -67,7 +67,7 @@ public class ProductController {
 			redirectAttrs.addFlashAttribute("flash", "updated");
 		}
 
-		return "redirect:/product/edit?id=" + product.getId();
+		return "redirect:/product/edit.do?id=" + product.getId();
 	}
 
 	@RequestMapping(value = "delete", method = RequestMethod.POST)
@@ -79,7 +79,7 @@ public class ProductController {
 			redirectAttrs.addFlashAttribute("flash", "deleted");
 		}
 
-		return "redirect:/home";
+		return "redirect:/home.do";
 	}
 
 }
