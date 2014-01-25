@@ -1,12 +1,17 @@
 package config;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.*;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.ComponentScan;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Import;
 import org.springframework.context.support.PropertySourcesPlaceholderConfigurer;
 import org.springframework.http.MediaType;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 import org.springframework.web.servlet.ViewResolver;
-import org.springframework.web.servlet.config.annotation.*;
+import org.springframework.web.servlet.config.annotation.EnableWebMvc;
+import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
+import org.springframework.web.servlet.config.annotation.ViewControllerRegistry;
+import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
 import org.springframework.web.servlet.view.ContentNegotiatingViewResolver;
 import org.springframework.web.servlet.view.InternalResourceViewResolver;
 import org.springframework.web.servlet.view.JstlView;
@@ -24,20 +29,19 @@ import javax.xml.parsers.DocumentBuilderFactory;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.Set;
 
 @Configuration
 @EnableWebMvc
-@ComponentScan(basePackages = { "controller", "spring"})
+@ComponentScan(basePackages = {"controller", "spring", "dao"})
 @EnableTransactionManagement
 @Import(PersistenceJPAConfig.class)
 
 public class AppConfig extends WebMvcConfigurerAdapter {
 
-	@Override
-	public void addResourceHandlers(ResourceHandlerRegistry registry) {
-		registry.addResourceHandler("/static/**").addResourceLocations("/static/").setCachePeriod(31556926);
-	}
+    @Override
+    public void addResourceHandlers(ResourceHandlerRegistry registry) {
+        registry.addResourceHandler("/static/**").addResourceLocations("/static/").setCachePeriod(31556926);
+    }
 
     @Override
     public void addViewControllers(ViewControllerRegistry registry) {
@@ -46,7 +50,7 @@ public class AppConfig extends WebMvcConfigurerAdapter {
 
     @Bean
     public XmlViewResolver xmlViewResolver() {
-        XmlViewResolver  xmlViewResolver = new XmlViewResolver();
+        XmlViewResolver xmlViewResolver = new XmlViewResolver();
 
         xmlViewResolver.setContentType(MediaType.APPLICATION_XML_VALUE);
         xmlViewResolver.setViewsToBound(new HashSet<String>(Arrays.asList("product")));
@@ -78,13 +82,13 @@ public class AppConfig extends WebMvcConfigurerAdapter {
         mappingJacksonJsonViewResolver.setViewClass(MappingJacksonJsonView.class);
         mappingJacksonJsonViewResolver.setContentType(MediaType.APPLICATION_JSON_VALUE);
 
-        contentNegotiatingViewResolver.setViewResolvers(Arrays.asList(new ViewResolver[] {xmlViewResolver, xsltViewResolver, mappingJacksonJsonViewResolver}));
+        contentNegotiatingViewResolver.setViewResolvers(Arrays.asList(new ViewResolver[]{xmlViewResolver, xsltViewResolver, mappingJacksonJsonViewResolver}));
 
         return contentNegotiatingViewResolver;
     }
 
-   @Bean
-	public ViewResolver internalResourceViewResolver() {
+    @Bean
+    public ViewResolver internalResourceViewResolver() {
         InternalResourceViewResolver internalResourceViewResolver = new InternalResourceViewResolver();
         internalResourceViewResolver.setViewClass(JstlView.class);
         internalResourceViewResolver.setPrefix("/WEB-INF/views/");
@@ -92,8 +96,8 @@ public class AppConfig extends WebMvcConfigurerAdapter {
         internalResourceViewResolver.setOrder(2);
         internalResourceViewResolver.setContentType(MediaType.TEXT_HTML_VALUE);
 
-		return internalResourceViewResolver;
-	}
+        return internalResourceViewResolver;
+    }
 
     @Bean
     public PropertySourcesPlaceholderConfigurer propertySourcesPlaceholderConfigurer() {
@@ -102,7 +106,7 @@ public class AppConfig extends WebMvcConfigurerAdapter {
 
     @Bean
     public DocumentBuilderFactory documentBuilderFactory() {
-         return javax.xml.parsers.DocumentBuilderFactory.newInstance();
+        return javax.xml.parsers.DocumentBuilderFactory.newInstance();
     }
 
     @Bean

@@ -1,11 +1,9 @@
 package spring.xml.converter.impl;
 
-import entities.Product;
-
+import entity.Product;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Text;
-
 import spring.xml.converter.EntityTransformer;
 
 public class ProductEntityTransformer implements EntityTransformer {

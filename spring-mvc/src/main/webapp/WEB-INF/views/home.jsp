@@ -20,6 +20,9 @@
                 <th></th>
                 <th>Name</th>
                 <th>Description</th>
+                <th>Created</th>
+                <th>Updated</th>
+                <th></th>
                 <th></th>
                 <th></th>
                 <th></th>
@@ -31,6 +34,8 @@
                     <td><a href="product/edit.do?id=${elem.id}">edit</a></td>
                     <td>${elem.name}</td>
                     <td>${elem.description}</td>
+                    <td>${elem.createdAt}</td>
+                    <td>${elem.updatedAt}</td>
                     <td><a href="${pageContext.request.contextPath}/rest/product/${elem.id}.json" target="_blank">json</a></td>
                     <td><a href="${pageContext.request.contextPath}/rest/product/${elem.id}.xml" target="_blank">xml</a></td>
                     <td><a href="${pageContext.request.contextPath}/rest/product/${elem.id}.html" target="_blank">html/xslt</a></td>

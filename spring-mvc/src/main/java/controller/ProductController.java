@@ -1,85 +1,86 @@
 package controller;
 
-import java.util.Map;
-
-import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
-import javax.validation.Valid;
-
-import entities.Product;
+import dao.ProductDao;
+import entity.Product;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.propertyeditors.StringTrimmerEditor;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.WebDataBinder;
-import org.springframework.web.bind.annotation.InitBinder;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+
+import javax.validation.Valid;
+import java.util.Map;
 
 @Controller
 @RequestMapping("/product")
 @Transactional
 public class ProductController {
 
-	@PersistenceContext
-	private EntityManager em;
+    @Autowired
+    private ProductDao productDao;
 
-	@InitBinder
-	protected void initBinder(WebDataBinder binder) {
-		binder.registerCustomEditor(String.class, new StringTrimmerEditor(true));
-	}
+//    BeanCreationException: Error creating bean with name 'productController': Initialization of bean failed; nested exception is org.springframework.aop.framework.AopConfigException: Could not generate CGLIB subclass of class [class controller.ProductController]: Common causes of this problem include using a final class or a non-visible class; nested exception is java.lang.IllegalArgumentException: Superclass has no null constructors but no arguments were given
+//    @Autowired
+//    public ProductController(ProductDao productDao) {
+//        this.productDao = productDao;
+//    }
 
-	@ModelAttribute("product")
-	public Product productModel(@RequestParam(required = false) Long id) {
-        if(id == null) {
+    @InitBinder
+    protected void initBinder(WebDataBinder binder) {
+        binder.registerCustomEditor(String.class, new StringTrimmerEditor(true));
+    }
+
+    @ModelAttribute("product")
+    public Product productModel(@RequestParam(required = false) Long id) {
+        if (id == null) {
             return new Product();
         }
 
-		Product p = em.find(Product.class, id);
+        Product p = productDao.findOne(id);
 
-		if (p == null) {
-			return new Product();
-		} else {
-			return p;
-		}
-	}
+        if (p == null) {
+            return new Product();
+        } else {
+            return p;
+        }
+    }
 
-	@RequestMapping(value = "edit", method = RequestMethod.GET)
-	public String editGet(@ModelAttribute("product") Product product, Map<String, Object> model) {
+    @RequestMapping(value = "edit", method = RequestMethod.GET)
+    public String editGet(@ModelAttribute("product") Product product, Map<String, Object> model) {
         // do some fancy stuff here
-		return "product/edit";
-	}
+        return "product/edit";
+    }
 
-	@RequestMapping(value = "edit", method = RequestMethod.POST)
-	public String post(@Valid @ModelAttribute("product") Product product, BindingResult result, Map<String, Object> model, RedirectAttributes redirectAttrs) {
-		if (result.hasErrors()) {
-			return this.editGet(product, model);
-		}
+    @RequestMapping(value = "edit", method = RequestMethod.POST)
+    public String post(@Valid @ModelAttribute("product") Product product, BindingResult result, Map<String, Object> model, RedirectAttributes redirectAttrs) {
+        if (result.hasErrors()) {
+            return this.editGet(product, model);
+        }
 
-		if (product.getId() == 0) {
-			em.persist(product);
-			redirectAttrs.addFlashAttribute("flash", "saved");
-		} else {
-			em.merge(product);
-			redirectAttrs.addFlashAttribute("flash", "updated");
-		}
+        if (product.getId() == 0) {
+            redirectAttrs.addFlashAttribute("flash", "saved");
+        } else {
+            redirectAttrs.addFlashAttribute("flash", "updated");
+        }
 
-		return "redirect:/product/edit.do?id=" + product.getId();
-	}
+        product = productDao.save(product);
 
-	@RequestMapping(value = "delete", method = RequestMethod.POST)
-	public String post(@RequestParam long id, RedirectAttributes redirectAttrs) {
-		Product p = em.find(Product.class, id);
+        return "redirect:/product/edit.do?id=" + product.getId();
+    }
 
-		if (p != null) {
-			em.remove(p);
-			redirectAttrs.addFlashAttribute("flash", "deleted");
-		}
+    @RequestMapping(value = "delete", method = RequestMethod.POST)
+    public String post(@RequestParam long id, RedirectAttributes redirectAttrs) {
+        Product p = productDao.findOne(id);
 
-		return "redirect:/home.do";
-	}
+        if (p != null) {
+            productDao.remove(p);
+            redirectAttrs.addFlashAttribute("flash", "deleted");
+        }
+
+        return "redirect:/home.do";
+    }
 
 }

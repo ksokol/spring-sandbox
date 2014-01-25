@@ -1,7 +1,5 @@
 package config;
 
-import javax.sql.DataSource;
-
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -13,6 +11,7 @@ import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
 import org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 
+import javax.sql.DataSource;
 import java.util.Properties;
 
 @PropertySource("classpath:config.properties")
@@ -44,9 +43,10 @@ public class PersistenceJPAConfig {
     public LocalContainerEntityManagerFactoryBean entityManagerFactoryBean() {
         final LocalContainerEntityManagerFactoryBean factoryBean = new LocalContainerEntityManagerFactoryBean();
         factoryBean.setDataSource(dataSource());
-        factoryBean.setPackagesToScan(new String[] { "entities" });
+        factoryBean.setPackagesToScan(new String[]{"entity"});
 
-        final JpaVendorAdapter vendorAdapter = new HibernateJpaVendorAdapter() {{
+        final JpaVendorAdapter vendorAdapter = new HibernateJpaVendorAdapter() {
+            {
                 setDatabasePlatform(hibernateDialect);
                 setGenerateDdl(jpaGenerateDdl);
                 setShowSql(true);
@@ -86,9 +86,11 @@ public class PersistenceJPAConfig {
     // }
 
     final Properties additionlProperties() {
-        return new Properties() {{
+        return new Properties() {
+            {
                 setProperty("hibernate.hbm2ddl.auto", hibernateHbm2ddlAuto);
-            } };
+            }
+        };
     }
 
 }
