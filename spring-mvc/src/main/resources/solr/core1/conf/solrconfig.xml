@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<config>
+  <luceneMatchVersion>LUCENE_40</luceneMatchVersion>
+
+  <!-- If a 'dir' option (with or without a regex) is used and nothing
+       is found that matches, it will be ignored
+    -->
+  <lib dir="/total/crap/dir/ignored" /> 
+  
+  <dataDir>${solr.data.dir:}</dataDir>
+
+  <directoryFactory name="DirectoryFactory" 
+                    class="${solr.directoryFactory:solr.NRTCachingDirectoryFactory}"/> 
+
+
+
+  <updateHandler class="solr.DirectUpdateHandler2">
+     <autoCommit> 
+       <maxTime>15000</maxTime> 
+       <openSearcher>false</openSearcher> 
+     </autoCommit>
+
+  </updateHandler>
+
+  <query>
+    <maxBooleanClauses>1024</maxBooleanClauses>
+
+    <filterCache class="solr.FastLRUCache"
+                 size="512"
+                 initialSize="512"
+                 autowarmCount="0"/>
+
+    <queryResultCache class="solr.LRUCache"
+                     size="512"
+                     initialSize="512"
+                     autowarmCount="0"/>
+   
+    <documentCache class="solr.LRUCache"
+                   size="512"
+                   initialSize="512"
+                   autowarmCount="0"/>
+
+
+    <enableLazyFieldLoading>true</enableLazyFieldLoading>
+   <queryResultWindowSize>20</queryResultWindowSize>
+   <queryResultMaxDocsCached>200</queryResultMaxDocsCached>
+
+    <listener event="newSearcher" class="solr.QuerySenderListener">
+      <arr name="queries">
+        <!--
+           <lst><str name="q">solr</str><str name="sort">price asc</str></lst>
+           <lst><str name="q">rocks</str><str name="sort">weight asc</str></lst>
+          -->
+      </arr>
+    </listener>
+    <listener event="firstSearcher" class="solr.QuerySenderListener">
+      <arr name="queries">
+        <lst>
+          <str name="q">static firstSearcher warming in solrconfig.xml</str>
+        </lst>
+      </arr>
+    </listener>
+
+    <useColdSearcher>false</useColdSearcher>
+    <maxWarmingSearchers>2</maxWarmingSearchers>
+  </query>
+
+  <requestDispatcher handleSelect="false" >
+    <requestParsers enableRemoteStreaming="false" 
+                    multipartUploadLimitInKB="2048000" />
+    <httpCaching never304="true" />
+  </requestDispatcher>
+
+  <requestHandler name="/select" class="solr.SearchHandler">
+     <lst name="defaults">
+       <str name="echoParams">all</str>
+       <int name="rows">10</int>
+       <str name="df">text</str>
+     </lst>
+  </requestHandler>
+
+  <requestHandler name="/update" class="solr.UpdateRequestHandler" />
+
+  <queryResponseWriter name="json" class="solr.JSONResponseWriter">
+    <str name="content-type">application/json; charset=UTF-8</str>
+  </queryResponseWriter>
+
+  <!-- XSLT response writer transforms the XML output by any xslt file found
+       in Solr's conf/xslt directory.  Changes to xslt files are checked for
+       every xsltCacheLifetimeSeconds.  
+    
+  <queryResponseWriter name="xslt" class="solr.XSLTResponseWriter">
+    <int name="xsltCacheLifetimeSeconds">5</int>
+  </queryResponseWriter>
+-->
+</config>

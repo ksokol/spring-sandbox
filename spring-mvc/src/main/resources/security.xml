@@ -7,7 +7,7 @@
         http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
         http://www.springframework.org/schema/security
 		http://www.springframework.org/schema/security/spring-security-3.1.xsd">
-  
+
    <security:authentication-manager>
     <security:authentication-provider>
      <security:user-service>
@@ -18,7 +18,8 @@
 
    <security:http pattern='/login.do' security="none"/>
    <security:http pattern='/static/**' security="none"/>
-	
+    <security:http pattern='/solr/core1/update' security="none"/>
+
    <security:http auto-config='true' use-expressions="true">
 	<security:intercept-url pattern="/**" access="isFullyAuthenticated()" />
 	<security:form-login login-page='/login.do' default-target-url='/home.do' always-use-default-target='true'/>

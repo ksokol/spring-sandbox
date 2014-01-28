@@ -34,8 +34,7 @@ import java.util.HashSet;
 @EnableWebMvc
 @ComponentScan(basePackages = {"controller", "spring", "dao"})
 @EnableTransactionManagement
-@Import(PersistenceJPAConfig.class)
-
+@Import({PersistenceJPAConfig.class, SearchConfig.class})
 public class AppConfig extends WebMvcConfigurerAdapter {
 
     @Override
@@ -46,6 +45,7 @@ public class AppConfig extends WebMvcConfigurerAdapter {
     @Override
     public void addViewControllers(ViewControllerRegistry registry) {
         registry.addViewController("/login.do");
+        registry.addViewController("/search.do");
     }
 
     @Bean
