@@ -4,12 +4,14 @@
 <%@ taglib tagdir="/WEB-INF/tags" prefix="layout" %>
 
 <layout:layout>
-
-    <h2>Search</h2>
-
-
-    <input id="search" type="text" placeholder="search" />
-
-    <iframe src="${pageContext.request.contextPath}/solr/core1/select?q=*:*"></iframe>
-
+    <div class="row">
+        <div class="span4">
+            <input id="search" type="text" placeholder="search" autocomplete="off" />
+        </div>
+    </div>
+    <div class="row">
+        <div class="span12">
+            <iframe id="search-result" src="${pageContext.request.contextPath}/solr/core1/xslt?q=*:*"></iframe>
+        </div>
+    </div>
 </layout:layout>

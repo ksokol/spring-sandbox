@@ -80,18 +80,33 @@
      </lst>
   </requestHandler>
 
+    <requestHandler name="/json" class="solr.SearchHandler">
+        <lst name="defaults">
+            <str name="echoParams">all</str>
+            <int name="rows">10</int>
+            <str name="df">text</str>
+            <str name="wt">json</str>
+        </lst>
+    </requestHandler>
+
+    <requestHandler name="/xslt" class="solr.SearchHandler">
+        <lst name="defaults">
+            <str name="echoParams">all</str>
+            <int name="rows">10</int>
+            <str name="df">text</str>
+            <str name="wt">xslt</str>
+            <str name="tr">product.xsl</str>
+        </lst>
+    </requestHandler>
+
   <requestHandler name="/update" class="solr.UpdateRequestHandler" />
 
   <queryResponseWriter name="json" class="solr.JSONResponseWriter">
     <str name="content-type">application/json; charset=UTF-8</str>
   </queryResponseWriter>
 
-  <!-- XSLT response writer transforms the XML output by any xslt file found
-       in Solr's conf/xslt directory.  Changes to xslt files are checked for
-       every xsltCacheLifetimeSeconds.  
-
   <queryResponseWriter name="xslt" class="solr.XSLTResponseWriter">
     <int name="xsltCacheLifetimeSeconds">5</int>
   </queryResponseWriter>
--->
+
 </config>

@@ -24,4 +24,12 @@ $(document).ready(function () {
             $('#deleteForm').submit();
         });
     }
+
+    var iframe = $('#search-result');
+    var url = iframe.attr('src').replace('*:*','');
+
+    $('#search').on('keyup', function() {
+        var val = $(this).val();
+        iframe.attr('src', url + "name:"+val+"*")
+    });
 });

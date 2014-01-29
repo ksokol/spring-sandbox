@@ -8,7 +8,7 @@
         <html>
             <head><title>XSLT PRODUCT</title></head>
             <body>            	
-                <h1>XSLT Product <xsl:value-of select="product/@id"/></h1>
+                <h1>Product <xsl:value-of select="product/@id"/></h1>
 
     			<ul>
     				<xsl:for-each select="product">    
