@@ -22,7 +22,11 @@ public abstract class AbstractEntity implements Serializable {
     private Integer version;
 
     @Field
-    @Column(insertable = true, updatable = false)
+    @Column(insertable = true, updatable = false, nullable = false)
+    private String  createdBy;
+
+    @Field
+    @Column(insertable = true, updatable = false, nullable = false)
     @Temporal(javax.persistence.TemporalType.TIMESTAMP)
     private Date createdAt;
 
@@ -45,6 +49,14 @@ public abstract class AbstractEntity implements Serializable {
 
     void setVersion(Integer version) {
         this.version = version;
+    }
+
+    public String getCreatedBy() {
+        return createdBy;
+    }
+
+    public void setCreatedBy(String createdBy) {
+        this.createdBy = createdBy;
     }
 
     public Date getCreatedAt() {

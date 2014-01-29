@@ -21,6 +21,7 @@ class ClasspathSolrInitializer extends CoreContainer.Initializer {
         log.info("looking for cores in " + home.getParent());
 
         CoreContainer cores = new CoreContainer(home.getParent());
+
         cores.load(home.getParent(), home.getAbsoluteFile());
         containerConfigFilename = cores.getConfigFile().getName();
 

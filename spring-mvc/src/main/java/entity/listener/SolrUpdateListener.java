@@ -1,5 +1,6 @@
-package search;
+package entity.listener;
 
+import entity.AbstractEntity;
 import org.apache.solr.client.solrj.SolrServer;
 import org.hibernate.event.spi.*;
 

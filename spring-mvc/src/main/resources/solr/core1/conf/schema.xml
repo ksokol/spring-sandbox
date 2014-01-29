@@ -4,17 +4,10 @@
 
  <fields>
         
-   <field name="id" type="string" indexed="true" stored="true" required="true" multiValued="false" /> 
+   <field name="id" type="string" indexed="true" stored="true" required="true" multiValued="false" />
 
-   <field name="location" type="location" indexed="true" stored="true"/>     
+   <field name="createdBy" type="string"  indexed="true"  stored="true" multiValued="false" required="true"/>
 
-   <field name="start" type="date" indexed="true" stored="true"/>  
-   <field name="names_map" type="string"  indexed="true"  stored="true" multiValued="true"/>
-   
-   <field name="baseClass" type="string"  indexed="true"  stored="true" multiValued="true"/>
-   <field name="features" type="string"  indexed="true"  stored="true" multiValued="true"/>
-   <field name="campaigns" type="string"  indexed="true"  stored="true" multiValued="true"/> 
-	  
    <dynamicField name="*" type="string"  indexed="true"  stored="true" multiValued="true"/>
    
  </fields>

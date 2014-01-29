@@ -34,7 +34,7 @@ import java.util.HashSet;
 @EnableWebMvc
 @ComponentScan(basePackages = {"controller", "spring", "dao"})
 @EnableTransactionManagement
-@Import({PersistenceJPAConfig.class, SearchConfig.class})
+@Import({PersistenceJPAConfig.class, SearchConfig.class, HibernateConfig.class})
 public class AppConfig extends WebMvcConfigurerAdapter {
 
     @Override

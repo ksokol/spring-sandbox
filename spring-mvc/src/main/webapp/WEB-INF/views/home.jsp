@@ -22,6 +22,7 @@
                 <th>Description</th>
                 <th>Created</th>
                 <th>Updated</th>
+                <th>Created by</th>
                 <th></th>
                 <th></th>
                 <th></th>
@@ -36,6 +37,7 @@
                     <td>${elem.description}</td>
                     <td>${elem.createdAt}</td>
                     <td>${elem.updatedAt}</td>
+                    <td>${elem.createdBy}</td>
                     <td><a href="${pageContext.request.contextPath}/rest/product/${elem.id}.json" target="_blank">json</a></td>
                     <td><a href="${pageContext.request.contextPath}/rest/product/${elem.id}.xml" target="_blank">xml</a></td>
                     <td><a href="${pageContext.request.contextPath}/rest/product/${elem.id}.html" target="_blank">html/xslt</a></td>

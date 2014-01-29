@@ -11,7 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.xml.sax.SAXException;
-import search.SolrUpdateListener;
+import entity.listener.SolrUpdateListener;
 
 import javax.annotation.PostConstruct;
 import javax.persistence.EntityManagerFactory;

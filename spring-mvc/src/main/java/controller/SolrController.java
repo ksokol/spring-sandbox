@@ -3,6 +3,9 @@ package controller;
 import org.apache.solr.common.SolrException;
 import org.apache.solr.common.cloud.*;
 import org.apache.solr.common.params.CommonParams;
+import org.apache.solr.common.params.MapSolrParams;
+import org.apache.solr.common.params.ModifiableSolrParams;
+import org.apache.solr.common.params.SolrParams;
 import org.apache.solr.common.util.ContentStreamBase;
 import org.apache.solr.common.util.NamedList;
 import org.apache.solr.common.util.SimpleOrderedMap;
@@ -20,6 +23,7 @@ import org.apache.solr.servlet.cache.HttpCacheHeaderUtil;
 import org.apache.solr.servlet.cache.Method;
 import org.apache.solr.util.FastWriter;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Component;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.xml.sax.InputSource;
@@ -28,6 +32,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.*;
 import java.nio.charset.Charset;
+import java.util.Arrays;
 import java.util.Map;
 import java.util.Set;
 import java.util.WeakHashMap;
@@ -62,13 +67,7 @@ public class SolrController {
     }
 
     @RequestMapping("**")
-    public void select(HttpServletRequest request, HttpServletResponse response) throws IOException {
-        if( abortErrorMessage != null ) {
-            response.sendError(500, abortErrorMessage);
-            return;
-        }
-
-        CoreContainer cores = this.cores;
+    public void select(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException {
         SolrCore core = null;
         SolrQueryRequest solrReq = null;
         SolrRequestHandler handler = null;
@@ -195,7 +194,7 @@ public class SolrController {
              * Content-Type)
              */
                         SolrRequestInfo.setRequestInfo(new SolrRequestInfo(solrReq, solrRsp));
-                        this.execute( request, handler, solrReq, solrRsp );
+                        this.execute( request, handler, solrReq, solrRsp, authentication );
                         HttpCacheHeaderUtil.checkHttpCachingVeto(solrRsp, response, reqMethod);
                         // add info to http headers
                         //TODO: See SOLR-232 and SOLR-267.
@@ -268,11 +267,16 @@ public class SolrController {
         return core;
     }
 
-    private void execute(HttpServletRequest req, SolrRequestHandler handler, SolrQueryRequest sreq, SolrQueryResponse rsp) {
+    private void execute(HttpServletRequest req, SolrRequestHandler handler, SolrQueryRequest sreq, SolrQueryResponse rsp, Authentication authentication) {
         // a custom filter could add more stuff to the request before passing it on.
         // for example: sreq.getContext().put( "HttpServletRequest", req );
         // used for logging query stats in SolrCore.execute()
-        sreq.getContext().put( "webapp", req.getContextPath() );
+        ModifiableSolrParams mapSolrParams = new ModifiableSolrParams(sreq.getParams());
+        mapSolrParams.add("fq", String.format("createdBy:%s", authentication.getName()));
+
+        sreq.setParams(mapSolrParams);
+
+        sreq.getContext().put("webapp", req.getContextPath());
         sreq.getCore().execute( handler, sreq, rsp );
     }
 

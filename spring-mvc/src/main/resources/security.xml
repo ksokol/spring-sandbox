@@ -11,7 +11,8 @@
    <security:authentication-manager>
     <security:authentication-provider>
      <security:user-service>
-      <security:user name="example" password="example" authorities="ROLE_USER" />
+      <security:user name="example1" password="example1" authorities="ROLE_USER" />
+      <security:user name="example2" password="example2" authorities="ROLE_USER" />
      </security:user-service>
     </security:authentication-provider>
    </security:authentication-manager>
