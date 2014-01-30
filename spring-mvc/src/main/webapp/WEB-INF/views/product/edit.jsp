@@ -34,6 +34,18 @@
             <div class="span4"><sf:errors cssClass="error" path="description"/></div>
         </div>
 
+        <div class="row">
+            <div class="span2"><span>Color</span></div>
+            <div class="span4">
+                <sf:select path="color">
+                                       <sf:option value="RED" />
+                                       <sf:option value="BLACK" />
+                                       <sf:option value="WHITE" />
+                </sf:select>
+            </div>
+            <div class="span4"><sf:errors cssClass="error" path="color"/></div>
+        </div>
+
         <input class="btn btn-primary" type="submit" value="save">
 
     </sf:form>

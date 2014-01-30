@@ -15,6 +15,7 @@
                 <security:authorize access="isAuthenticated()">
                 <li><a href="${pageContext.request.contextPath}/home.do">Home</a></li>
                 <li><a href="${pageContext.request.contextPath}/search.do">Search (iframe)</a></li>
+                <li><a target="_blank" href="${pageContext.request.contextPath}/solr/core1/select?q=*:*">Search (Solr)</a></li>
                 <li><a href="${pageContext.request.contextPath}/j_spring_security_logout">Logout</a></li>
                 </security:authorize>
               </ul>

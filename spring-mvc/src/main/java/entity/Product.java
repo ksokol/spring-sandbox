@@ -3,6 +3,8 @@ package entity;
 import org.apache.solr.client.solrj.beans.Field;
 
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 import javax.xml.bind.annotation.XmlRootElement;
@@ -21,6 +23,10 @@ public class Product extends AbstractEntity {
     @Field
     private String description;
 
+    @Field
+    @Enumerated(EnumType.STRING)
+    private Color color;
+
     public String getName() {
         return name;
     }
@@ -35,6 +41,14 @@ public class Product extends AbstractEntity {
 
     public void setDescription(String description) {
         this.description = description;
+    }
+
+    public Color getColor() {
+        return color;
+    }
+
+    public void setColor(Color color) {
+        this.color = color;
     }
 
     @Override
