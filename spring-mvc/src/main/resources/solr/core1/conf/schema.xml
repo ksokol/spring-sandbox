@@ -5,11 +5,20 @@
  <fields>
         
    <field name="id" type="string" indexed="true" stored="true" required="true" multiValued="false" />
+     <field name="createdBy" type="string"  indexed="true"  stored="true" multiValued="false" required="true"/>
+     <field name="createdAt" type="tdate"  indexed="true"  stored="true" multiValued="false" required="true"/>
+     <field name="updatedAt" type="tdate"  indexed="true"  stored="true" multiValued="false" required="true"/>
 
-   <field name="createdBy" type="string"  indexed="true"  stored="true" multiValued="false" required="true"/>
+     <dynamicField name="f_*"  				type="string" />
+     <dynamicField name="n_*"  				type="ngrams" />
+     <dynamicField name="*"  					type="text" />
 
-   <dynamicField name="*" type="string"  indexed="true"  stored="true" multiValued="true"/>
-   
+     <copyField 	source="*" 				dest="f_*"/>
+     <copyField 	source="*" 				dest="n_*"/>
+
+     <field 		name="mlt" 				type="text"		multiValued="true"  />
+     <copyField 	source="*" 				dest="mlt"/>
+
  </fields>
 
  <uniqueKey>id</uniqueKey>
@@ -57,6 +66,34 @@
 
     <!-- A specialized field for geospatial search. If indexed, this fieldType must not be multivalued. -->
     <fieldType name="location" class="solr.LatLonType" subFieldSuffix="_coordinate"/>
+
+      <fieldType name="ngrams" class="solr.TextField" indexed="true" stored="true">
+          <analyzer type="query">
+              <tokenizer class="solr.WhitespaceTokenizerFactory" />
+              <filter class="solr.LowerCaseFilterFactory"/>
+              <filter class="solr.WordDelimiterFilterFactory" generateWordParts="0" generateNumberParts="0" catenateWords="1" catenateNumbers="1" catenateAll="0" splitOnNumerics="0" />
+              <filter class="solr.EdgeNGramFilterFactory" minGramSize="1" maxGramSize="125" side="front"/>
+              <filter class="solr.RemoveDuplicatesTokenFilterFactory"/>
+          </analyzer>
+          <analyzer type="index">
+              <tokenizer class="solr.WhitespaceTokenizerFactory"/>
+              <filter class="solr.LowerCaseFilterFactory"/>
+              <filter class="solr.WordDelimiterFilterFactory" generateWordParts="0" generateNumberParts="0" catenateWords="1" catenateNumbers="1" catenateAll="0" splitOnNumerics="0" />
+              <filter class="solr.EdgeNGramFilterFactory" minGramSize="1" maxGramSize="125" side="front"/>
+              <filter class="solr.RemoveDuplicatesTokenFilterFactory"/>
+          </analyzer>
+      </fieldType>
+
+      <fieldType name="text" class="solr.TextField" positionIncrementGap="100" autoGeneratePhraseQueries="true" indexed="true" stored="true">
+          <analyzer type="index">
+              <tokenizer class="solr.StandardTokenizerFactory"/>
+              <filter class="solr.LowerCaseFilterFactory"/>
+          </analyzer>
+          <analyzer type="query">
+              <tokenizer class="solr.StandardTokenizerFactory"/>
+              <filter class="solr.LowerCaseFilterFactory"/>
+          </analyzer>
+      </fieldType>
 
  </types>
 </schema>

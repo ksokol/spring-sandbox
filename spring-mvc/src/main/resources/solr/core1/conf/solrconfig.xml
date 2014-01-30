@@ -77,6 +77,11 @@
        <str name="echoParams">all</str>
        <int name="rows">10</int>
        <str name="df">text</str>
+         <str name="q.alt">-*:*</str> <!-- dont't match any documents per default -->
+         <str name="facet">true</str>
+         <str name="facet.field">color</str>
+         <str name="facet.mincount">1</str>
+         <str name="facet.limit">5</str>
      </lst>
   </requestHandler>
 
@@ -100,6 +105,43 @@
     </requestHandler>
 
   <requestHandler name="/update" class="solr.UpdateRequestHandler" />
+
+    <requestHandler name="/spell" class="solr.StandardRequestHandler">
+        <lst name="defaults">
+            <str name="spellcheck">true</str>
+            <str name="spellcheck.collate">true</str>
+            <str name="df">text</str>
+        </lst>
+        <arr name="last-components">
+            <str>spellcheck</str>
+        </arr>
+    </requestHandler>
+
+    <requestHandler name="/suggest" class="org.apache.solr.handler.component.SearchHandler">
+        <lst name="defaults">
+            <str name="omitHeader">true</str>
+            <str name="df">text</str>
+            <str name="group">true</str>
+        </lst>
+    </requestHandler>
+
+    <!-- more like this -->
+    <requestHandler name="/mlt" class="solr.StandardRequestHandler">
+        <lst name="defaults">
+            <str name="defType">edismax</str>
+            <str name="qf">name^2 color^1</str>
+            <str name="q.alt">-*:*</str> <!-- dont't match any documents per default -->
+        </lst>
+    </requestHandler>
+
+    <searchComponent name="spellcheck" class="solr.SpellCheckComponent">
+        <lst name="spellchecker">
+            <str name="classname">solr.IndexBasedSpellChecker</str>
+            <str name="spellcheckIndexDir">./spellchecker</str>
+            <str name="field">mlt</str>
+            <str name="buildOnCommit">true</str>
+        </lst>
+    </searchComponent>
 
   <queryResponseWriter name="json" class="solr.JSONResponseWriter">
     <str name="content-type">application/json; charset=UTF-8</str>
