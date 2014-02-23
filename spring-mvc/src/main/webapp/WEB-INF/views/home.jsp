@@ -12,6 +12,7 @@
 
     <h2>Products</h2>
 
+    <a href="country/edit.do">add country (autoGrowCollectionLimit)</a><br />
     <a href="product/edit.do">add product</a>
 
     <table id="list" class="table table-bordered table-striped tablesorter">
