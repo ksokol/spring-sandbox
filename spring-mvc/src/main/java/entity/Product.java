@@ -1,11 +1,13 @@
 package entity;
 
 import org.apache.solr.client.solrj.beans.Field;
+import org.hibernate.validator.constraints.NotEmpty;
 
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
 import javax.persistence.Table;
+import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 import javax.xml.bind.annotation.XmlRootElement;
 
@@ -18,14 +20,20 @@ public class Product extends AbstractEntity {
 
     @Field
     @NotNull
+    @NotEmpty
     private String name;
 
     @Field
     private String description;
 
+    @NotNull
     @Field
     @Enumerated(EnumType.STRING)
     private Color color;
+
+    @NotNull
+    @Min(value = 1)
+    private Integer quantity;
 
     public String getName() {
         return name;
@@ -49,6 +57,14 @@ public class Product extends AbstractEntity {
 
     public void setColor(Color color) {
         this.color = color;
+    }
+
+    public Integer getQuantity() {
+        return quantity;
+    }
+
+    public void setQuantity(Integer quantity) {
+        this.quantity = quantity;
     }
 
     @Override

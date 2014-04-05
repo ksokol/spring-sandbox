@@ -5,6 +5,17 @@
 <%@ taglib prefix="s" uri="http://www.springframework.org/tags"%>
 <%@ taglib tagdir="/WEB-INF/tags" prefix="layout" %>
 
+<s:hasBindErrors name="product">
+    <div id="error-noty" style="display:none;">
+        <h3>You have errors in your input!</h3>
+        <ul>
+            <c:forEach items="${errors.fieldErrors}" var="error">
+                <li>${error.codes[1]} ${error.defaultMessage}</li>
+            </c:forEach>
+        </ul>
+    </div>
+</s:hasBindErrors>
+
 <layout:layout>
     <c:if test="${fn:length(flash) > 0}">
         <div class="alert alert-success">
@@ -46,6 +57,13 @@
             <div class="span4"><sf:errors cssClass="error" path="color"/></div>
         </div>
 
+
+        <div class="row">
+            <div class="span2"><span>Quantity</span></div>
+            <div class="span4"><sf:input path="quantity"/></div>
+            <div class="span4"><sf:errors cssClass="error" path="quantity"/></div>
+        </div>
+
         <input class="btn btn-primary" type="submit" value="save">
 
     </sf:form>
@@ -72,4 +90,11 @@
             <a id="ja" href="#" class="btn btn-danger">yes</a>
         </div>
     </div>
+
+    <script>
+        var errors = $('#error-noty');
+        if(errors.html()) {
+            noty({text: errors.html()});
+        }
+    </script>
 </layout:layout>
