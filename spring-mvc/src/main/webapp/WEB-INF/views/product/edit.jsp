@@ -5,18 +5,18 @@
 <%@ taglib prefix="s" uri="http://www.springframework.org/tags"%>
 <%@ taglib tagdir="/WEB-INF/tags" prefix="layout" %>
 
-<s:hasBindErrors name="product">
-    <div id="error-noty" style="display:none;">
-        <h3>You have errors in your input!</h3>
-        <ul>
-            <c:forEach items="${errors.fieldErrors}" var="error">
-                <li>${error.codes[1]} ${error.defaultMessage}</li>
-            </c:forEach>
-        </ul>
-    </div>
-</s:hasBindErrors>
-
 <layout:layout>
+    <s:hasBindErrors name="product">
+        <div id="error-noty" style="display:none;">
+            <h3>You have errors in your input!</h3>
+            <ul>
+                <c:forEach items="${errors.fieldErrors}" var="error">
+                    <li>${error.codes[1]} ${error.defaultMessage}</li>
+                </c:forEach>
+            </ul>
+        </div>
+    </s:hasBindErrors>
+
     <c:if test="${fn:length(flash) > 0}">
         <div class="alert alert-success">
             ${flash}
