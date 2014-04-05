@@ -8,7 +8,7 @@
         <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/static/css/bootstrap.min.css">
         <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/static/css/style.css">
 
-        <script type="text/javascript" src="${pageContext.request.contextPath}/static/js/jquery-1.7.2.min.js"></script>
+        <script type="text/javascript" src="${pageContext.request.contextPath}/webjars/jquery/1.7.2/jquery.min.js"></script>
         <script type="text/javascript" src="${pageContext.request.contextPath}/webjars/noty/2.2.2/jquery.noty.packaged.min.js"></script>
         <script type="text/javascript" src="${pageContext.request.contextPath}/static/js/jquery.tablesorter.min.js"></script>
         <script type="text/javascript" src="${pageContext.request.contextPath}/static/js/bootstrap.min.js"></script>
