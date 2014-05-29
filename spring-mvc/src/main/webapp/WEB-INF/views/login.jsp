@@ -11,7 +11,11 @@
     
         <div class="row">    
    			<div class="span2"> <input type="text" name="j_password" placeholder="Password" value="example1"></div>
-    	</div> 
+    	</div>
+
+        <div class="row">
+            <div class="span2"> <input type="text" name="itemId" placeholder="Item id (optional)"></div>
+        </div>
         <p>login with example1/example1 or example2/example2</p>
         <input class="btn btn-primary" type="submit" value="login">
      </form>  

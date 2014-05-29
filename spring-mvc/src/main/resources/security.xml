@@ -8,7 +8,7 @@
         http://www.springframework.org/schema/security
 		http://www.springframework.org/schema/security/spring-security-3.1.xsd">
 
-   <security:authentication-manager>
+   <security:authentication-manager alias="authenticationManager">
     <security:authentication-provider>
      <security:user-service>
       <security:user name="example1" password="example1" authorities="ROLE_USER" />
@@ -21,9 +21,31 @@
    <security:http pattern='/static/**' security="none"/>
     <security:http pattern='/solr/core1/update' security="none"/>
 
-   <security:http auto-config='true' use-expressions="true">
-	<security:intercept-url pattern="/**" access="isFullyAuthenticated()" />
-	<security:form-login login-page='/login.do' default-target-url='/home.do' always-use-default-target='true'/>
-	<security:logout logout-success-url="/login.do" />
+   <security:http use-expressions="true" entry-point-ref="authenticationEntryPoint">
+        <security:intercept-url pattern="/**" access="isFullyAuthenticated()" />
+        <security:custom-filter position="FORM_LOGIN_FILTER" ref="customAuthenticationFilter" />
+	    <security:logout logout-success-url="/login.do" />
    </security:http>
+
+    <bean id="customAuthenticationFilter" class="org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter">
+        <property name="authenticationManager" ref="authenticationManager" />
+        <property name="filterProcessesUrl" value="/j_spring_security_check" />
+        <property name="authenticationFailureHandler" ref="authenticationFailureHandler" />
+        <property name="authenticationSuccessHandler" ref="authenticationSuccessHandler" />
+        <property name="authenticationDetailsSource">
+            <bean class="security.CustomWebAuthenticationDetailsSource" />
+        </property>
+    </bean>
+
+    <bean id="authenticationEntryPoint" class="org.springframework.security.web.authentication.LoginUrlAuthenticationEntryPoint">
+        <constructor-arg name="loginFormUrl" value="/login.do" />
+    </bean>
+
+    <bean id="authenticationFailureHandler" class="org.springframework.security.web.authentication.SimpleUrlAuthenticationFailureHandler">
+        <property name="defaultFailureUrl" value="/login.do?error" />
+    </bean>
+
+    <bean id="authenticationSuccessHandler" class="security.ItemIdBasedAuthenticationSuccessHandler">
+        <constructor-arg index="0" value="/home.do" />
+    </bean>
 </beans>
