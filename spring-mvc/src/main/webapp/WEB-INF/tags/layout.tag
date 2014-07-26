@@ -1,5 +1,6 @@
 <%@ taglib prefix="security" uri="http://www.springframework.org/security/tags"%>
 <%@ taglib uri="http://sandbox.local/common.tld" prefix="common" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 
 <!DOCTYPE HTML>
 <html>
@@ -20,11 +21,20 @@
             <div class="container">
               <ul class="nav">
                 <security:authorize access="isAuthenticated()">
-                <li><a href="${pageContext.request.contextPath}/home.do"><common:message code="nav.home" /></a></li>
-                <li><a href="${pageContext.request.contextPath}/search.do"><common:message code="nav.solr.iframe" /></a></li>
-                <li><a href="${pageContext.request.contextPath}/approval/confirm.do"><common:message code="nav.approval" /></a></li>
-                <li><a target="_blank" href="${pageContext.request.contextPath}/solr/core1/select?q=*:*"><common:message code="nav.solr" /></a></li>
-                <li><a href="${pageContext.request.contextPath}/j_spring_security_logout"><common:message code="nav.logout" /></a></li>
+                    <li><a href="${pageContext.request.contextPath}/home.do"><common:message code="nav.home" /></a></li>
+                    <li><a href="${pageContext.request.contextPath}/search.do"><common:message code="nav.solr.iframe" /></a></li>
+                    <li><a href="${pageContext.request.contextPath}/approval/confirm.do"><common:message code="nav.approval" /></a></li>
+                    <li><a target="_blank" href="${pageContext.request.contextPath}/solr/core1/select?q=*:*"><common:message code="nav.solr" /></a></li>
+                    <li><a href="${pageContext.request.contextPath}/switch.do"><common:message code="nav.switch" /></a></li>
+                    <li class="dropdown">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                            <security:authentication property="principal.username" />
+                            <b class="caret"></b>
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li><a href="${pageContext.request.contextPath}/j_spring_security_logout"><common:message code="nav.logout" /></a></li>
+                        </ul>
+                    </li>
                 </security:authorize>
               </ul>
             </div>
@@ -34,5 +44,6 @@
         <div class="container">
             <jsp:doBody />
         </div>
+
     </body>
 </html>

@@ -8,14 +8,9 @@
         http://www.springframework.org/schema/security
 		http://www.springframework.org/schema/security/spring-security-3.1.xsd">
 
-   <security:authentication-manager alias="authenticationManager">
-    <security:authentication-provider>
-     <security:user-service>
-      <security:user name="example1" password="example1" authorities="ROLE_USER" />
-      <security:user name="example2" password="example2" authorities="ROLE_USER" />
-     </security:user-service>
-    </security:authentication-provider>
-   </security:authentication-manager>
+    <security:authentication-manager alias="authenticationManager">
+        <security:authentication-provider user-service-ref="userDetailsService"/>
+    </security:authentication-manager>
 
    <security:http pattern='/login.do' security="none"/>
    <security:http pattern='/static/**' security="none"/>
@@ -25,9 +20,16 @@
         <security:intercept-url pattern="/**" access="isFullyAuthenticated()" />
         <security:form-login authentication-details-source-ref="customWebAuthenticationDetailsSource" login-page="/login.do" authentication-success-handler-ref="authenticationSuccessHandler" authentication-failure-url="/login.do?error" />
         <security:logout logout-success-url="/login.do" />
+        <security:custom-filter ref="switchUserProcessingFilter" after="FILTER_SECURITY_INTERCEPTOR" />
    </security:http>
 
+    <bean id="switchUserProcessingFilter" class="security.CustomSwitchUserFilter">
+        <property name="userDetailsService" ref="userDetailsService" />
+    </bean>
+
     <bean id="customWebAuthenticationDetailsSource" class="security.CustomWebAuthenticationDetailsSource" />
+
+    <bean id ="userDetailsService" class="security.CustomUserDetailsService" />
 
     <bean id="authenticationSuccessHandler" class="security.ItemIdBasedAuthenticationSuccessHandler">
         <constructor-arg index="0" value="/home.do" />
