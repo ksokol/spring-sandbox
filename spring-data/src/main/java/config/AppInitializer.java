@@ -1,7 +1,7 @@
 package config;
 
+import datasource.TenantFilter;
 import org.springframework.data.rest.webmvc.config.RepositoryRestMvcConfiguration;
-import org.springframework.web.filter.DelegatingFilterProxy;
 import org.springframework.web.servlet.support.AbstractAnnotationConfigDispatcherServletInitializer;
 
 import javax.servlet.Filter;
@@ -13,7 +13,7 @@ public class AppInitializer extends AbstractAnnotationConfigDispatcherServletIni
 
     @Override
     protected Filter[] getServletFilters() {
-        return new Filter[] { new DelegatingFilterProxy("springSecurityFilterChain") };
+        return new Filter[] { new TenantFilter() };
     }
 
     @Override
@@ -23,7 +23,7 @@ public class AppInitializer extends AbstractAnnotationConfigDispatcherServletIni
 
     @Override
     protected Class<?>[] getRootConfigClasses() {
-        return new Class<?>[] { SecurityConfig.class, PersistenceConfig.class };
+        return new Class<?>[] { PersistenceConfig.class };
     }
 
     @Override
