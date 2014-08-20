@@ -3,7 +3,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>spring-sandbox</groupId>
     <artifactId>spring-sandbox</artifactId>
-    <packaging>war</packaging>
+    <packaging>pom</packaging>
     <version>0.0.1-SNAPSHOT</version>
 
     <properties>

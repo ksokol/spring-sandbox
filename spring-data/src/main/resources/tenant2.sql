@@ -1,0 +1,1 @@
+insert into myentity(id,name) values (1,'tenant2');
