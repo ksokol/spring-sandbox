@@ -26,8 +26,11 @@ public class TenantFilter implements Filter {
         HttpServletRequest httpRequest = (HttpServletRequest) request;
         String tenant = matchTenantSystemIDToken(httpRequest.getRequestURI());
         Tenant.setCurrentTenant(tenant);
-        chain.doFilter(request, response);
-        Tenant.clearCurrentTenant();
+        try {
+            chain.doFilter(request, response);
+        } finally {
+            Tenant.clearCurrentTenant();
+        }
     }
 
     @Override
