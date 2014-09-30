@@ -2,8 +2,8 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>spring-sandbox</groupId>
     <artifactId>spring-sandbox</artifactId>
-    <packaging>pom</packaging>
-    <version>0.0.2-SNAPSHOT</version>
+    <packaging>war</packaging>
+    <version>0.0.3-SNAPSHOT</version>
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
