@@ -8,15 +8,15 @@
         http://www.springframework.org/schema/security
 		http://www.springframework.org/schema/security/spring-security-3.1.xsd">
 
-    <security:authentication-manager alias="authenticationManager">
+   <security:authentication-manager alias="authenticationManager">
         <security:authentication-provider user-service-ref="userDetailsService"/>
-    </security:authentication-manager>
+   </security:authentication-manager>
 
    <security:http pattern='/login.do' security="none"/>
    <security:http pattern='/static/**' security="none"/>
    <security:http pattern='/solr/core1/update' security="none"/>
 
-   <security:http use-expressions="true">
+   <security:http use-expressions="true" security-context-repository-ref="refreshingUserDetailsSecurityContextRepository">
         <security:intercept-url pattern="/**" access="isFullyAuthenticated()" />
         <security:form-login authentication-details-source-ref="customWebAuthenticationDetailsSource" login-page="/login.do" authentication-success-handler-ref="authenticationSuccessHandler" authentication-failure-url="/login.do?error" />
         <security:logout logout-success-url="/login.do" />
@@ -33,5 +33,12 @@
 
     <bean id="authenticationSuccessHandler" class="security.ItemIdBasedAuthenticationSuccessHandler">
         <constructor-arg index="0" value="/home.do" />
+    </bean>
+
+    <bean id="refreshingUserDetailsSecurityContextRepository" class="security.RefreshingUserDetailsSecurityContextRepository">
+        <constructor-arg index="0">
+            <bean class="org.springframework.security.web.context.HttpSessionSecurityContextRepository" />
+        </constructor-arg>
+        <constructor-arg index="1" ref="userDetailsService" />
     </bean>
 </beans>

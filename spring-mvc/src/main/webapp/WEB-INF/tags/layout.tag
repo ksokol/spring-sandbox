@@ -23,6 +23,7 @@
                 <security:authorize access="isAuthenticated()">
                     <li><a href="${pageContext.request.contextPath}/home.do"><common:message code="nav.home" /></a></li>
                     <li><a href="${pageContext.request.contextPath}/search.do"><common:message code="nav.solr.iframe" /></a></li>
+                    <li><a href="${pageContext.request.contextPath}/user/disable.do"><common:message code="nav.user.disable" /></a></li>
                     <li><a href="${pageContext.request.contextPath}/approval/confirm.do"><common:message code="nav.approval" /></a></li>
                     <li><a target="_blank" href="${pageContext.request.contextPath}/solr/core1/select?q=*:*"><common:message code="nav.solr" /></a></li>
                     <li><a href="${pageContext.request.contextPath}/switch.do"><common:message code="nav.switch" /></a></li>
