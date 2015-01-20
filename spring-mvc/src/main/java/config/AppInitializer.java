@@ -18,11 +18,13 @@ public class AppInitializer implements WebApplicationInitializer {
 		AnnotationConfigWebApplicationContext root = new AnnotationConfigWebApplicationContext();
 		root.register(AppConfig.class);
 
-		servletContext.addListener(new ContextLoaderListener());
+		servletContext.addListener(new ContextLoaderListener(root));
 
-        servletContext.setInitParameter("contextConfigLocation","classpath:security.xml");
+		AnnotationConfigWebApplicationContext mvc = new AnnotationConfigWebApplicationContext();
+		mvc.register(MvcConfig.class);
 
-		ServletRegistration.Dynamic dispatcher = servletContext.addServlet("appServlet", new DispatcherServlet(root));
+		ServletRegistration.Dynamic dispatcher = servletContext.addServlet("appServlet", new DispatcherServlet(mvc));
+
 		dispatcher.setLoadOnStartup(1);
 		dispatcher.addMapping("/");
 

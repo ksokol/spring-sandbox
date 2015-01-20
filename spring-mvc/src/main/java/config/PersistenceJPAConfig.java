@@ -1,19 +1,20 @@
 package config;
 
+import javax.sql.DataSource;
+
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.DependsOn;
 import org.springframework.context.annotation.PropertySource;
+import org.springframework.core.io.ClassPathResource;
 import org.springframework.jdbc.datasource.DriverManagerDataSource;
+import org.springframework.jdbc.datasource.init.ResourceDatabasePopulator;
 import org.springframework.orm.jpa.JpaTransactionManager;
 import org.springframework.orm.jpa.JpaVendorAdapter;
 import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
 import org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
-
-
-import javax.sql.DataSource;
-import java.util.Properties;
 
 @PropertySource("classpath:config.properties")
 @Configuration
@@ -41,7 +42,7 @@ public class PersistenceJPAConfig {
     private String hibernateHbm2ddlAuto;
 
     @Bean
-    public LocalContainerEntityManagerFactoryBean entityManagerFactoryBean() {
+    public LocalContainerEntityManagerFactoryBean entityManagerFactory() {
         final LocalContainerEntityManagerFactoryBean factoryBean = new LocalContainerEntityManagerFactoryBean();
         factoryBean.setDataSource(dataSource());
         factoryBean.setPackagesToScan(new String[]{"entity"});
@@ -55,9 +56,6 @@ public class PersistenceJPAConfig {
         };
 
         factoryBean.setJpaVendorAdapter(vendorAdapter);
-
-        //factoryBean.setJpaProperties(additionlProperties());
-
         return factoryBean;
     }
 
@@ -76,23 +74,18 @@ public class PersistenceJPAConfig {
     @Bean
     public JpaTransactionManager transactionManager() {
         final JpaTransactionManager transactionManager = new JpaTransactionManager();
-        transactionManager.setEntityManagerFactory(entityManagerFactoryBean().getObject());
+        transactionManager.setEntityManagerFactory(entityManagerFactory().getObject());
 
         return transactionManager;
     }
 
-    // @Bean
-    // public PersistenceExceptionTranslationPostProcessor
-    // persistenceExceptionTranslationPostProcessor() {
-    // return new PersistenceExceptionTranslationPostProcessor();
-    // }
-
-    final Properties additionlProperties() {
-        return new Properties() {
-            {
-                setProperty("hibernate.hbm2ddl.auto", hibernateHbm2ddlAuto);
-            }
-        };
+    @Bean
+    @DependsOn("entityManagerFactory")
+    public ResourceDatabasePopulator initDatabase(DataSource dataSource) throws Exception {
+        ResourceDatabasePopulator populator = new ResourceDatabasePopulator();
+        populator.addScript(new ClassPathResource("data.sql"));
+        populator.populate(dataSource.getConnection());
+        return populator;
     }
 
 }

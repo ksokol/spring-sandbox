@@ -1,39 +1,25 @@
 package entity;
 
-import org.apache.solr.client.solrj.beans.Field;
-
-import javax.persistence.*;
 import java.io.Serializable;
-import java.sql.Timestamp;
-import java.util.Date;
+
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
+import javax.persistence.MappedSuperclass;
+import javax.persistence.Transient;
+import javax.persistence.Version;
 
 @MappedSuperclass
 public abstract class AbstractEntity implements Serializable {
 
     @Transient
     public static final long serialVersionUID = 1L;
-
-    @Field
+    
     @Id
     @GeneratedValue
     private long id;
 
     @Version
     private Integer version;
-
-    @Field
-    @Column(insertable = true, updatable = false, nullable = false)
-    private String  createdBy;
-
-    @Field
-    @Column(insertable = true, updatable = false, nullable = false)
-    @Temporal(javax.persistence.TemporalType.TIMESTAMP)
-    private Date createdAt;
-
-    @Field
-    @Column(insertable = false, updatable = true)
-    @Temporal(javax.persistence.TemporalType.TIMESTAMP)
-    private Date updatedAt;
 
     public long getId() {
         return id;
@@ -49,44 +35,6 @@ public abstract class AbstractEntity implements Serializable {
 
     void setVersion(Integer version) {
         this.version = version;
-    }
-
-    public String getCreatedBy() {
-        return createdBy;
-    }
-
-    public void setCreatedBy(String createdBy) {
-        this.createdBy = createdBy;
-    }
-
-    public Date getCreatedAt() {
-        return createdAt;
-    }
-
-    void setCreatedAt(Date createdAt) {
-        this.createdAt = createdAt;
-    }
-
-    public Date getUpdatedAt() {
-        return updatedAt;
-    }
-
-    void setUpdatedAt(Date updatedAt) {
-        this.updatedAt = updatedAt;
-    }
-
-    @PrePersist
-    void onCreate() {
-        if(createdAt == null) {
-            createdAt = new Date();
-        }
-
-        this.updatedAt = new Date();
-    }
-
-    @PreUpdate
-    void onUpdate() {
-        this.updatedAt = new Date();
     }
 
     @Override
