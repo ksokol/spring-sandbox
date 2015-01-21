@@ -6,7 +6,7 @@
         http://www.springframework.org/schema/beans 
         http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
         http://www.springframework.org/schema/security
-		http://www.springframework.org/schema/security/spring-security-3.1.xsd">
+		http://www.springframework.org/schema/security/spring-security-3.2.xsd">
 
     <security:authentication-manager alias="authenticationManager">
         <security:authentication-provider ref="authenticationManagerForPersonal"/>
@@ -16,18 +16,34 @@
     <security:http pattern='/login.do' security="none"/>
     <security:http pattern='/static/**' security="none"/>
 
-    <security:http use-expressions="true">
+    <security:http use-expressions="true" entry-point-ref="loginUrlAuthenticationEntryPoint">
         <security:intercept-url pattern="/**" access="isFullyAuthenticated()"/>
-        <security:form-login login-page="/login.do" authentication-success-handler-ref="redirectRoleStrategy" authentication-failure-url="/login.do?error"/>
         <security:logout logout-success-url="/login.do"/>
+        <security:custom-filter ref="CustomUsernamePasswordAuthenticationFilter" position="FORM_LOGIN_FILTER" />
     </security:http>
 
-    <bean id="authenticationManagerForPersonal" class="org.springframework.security.authentication.dao.DaoAuthenticationProvider">
+    <bean id="failureHandler" class="org.springframework.security.web.authentication.SimpleUrlAuthenticationFailureHandler">
+        <property name="defaultFailureUrl" value="/login.do?error"/>
+    </bean>
+
+    <bean id="loginUrlAuthenticationEntryPoint" class="org.springframework.security.web.authentication.LoginUrlAuthenticationEntryPoint">
+        <property name="loginFormUrl" value="/login.do"/>
+    </bean>
+
+    <bean id="authenticationManagerForPersonal" class="security.CustomDaoAuthenticationProvider">
+        <constructor-arg index="0" value="org.springframework.security.authentication.UsernamePasswordAuthenticationToken" />
         <property name="userDetailsService" ref="PersonalLoginServiceImpl"/>
     </bean>
 
-    <bean id="authenticationManagerForGroup" class="org.springframework.security.authentication.dao.DaoAuthenticationProvider">
+    <bean id="authenticationManagerForGroup" class="security.CustomDaoAuthenticationProvider">
+        <constructor-arg index="0" value="security.CustomUsernamePasswordAuthenticationToken" />
         <property name="userDetailsService" ref="GroupLoginServiceImpl"/>
+    </bean>
+
+    <bean id="CustomUsernamePasswordAuthenticationFilter" class="security.CustomUsernamePasswordAuthenticationFilter">
+        <property name="authenticationManager" ref="authenticationManager" />
+        <property name="authenticationFailureHandler" ref="failureHandler"/>
+        <property name="authenticationSuccessHandler" ref="redirectRoleStrategy"/>
     </bean>
 
     <bean id="redirectRoleStrategy" class="security.RoleBasedAuthenticationSuccessHandler">
